@@ -1,36 +1,59 @@
 package com.jack.bullpenbook.model;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Player {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String position;     // e.g. "SP", "RP", "1B", "CF"
-    private String battingHand;  // "R", "L", "S"
-    private String throwingHand; // "R", "L"
+    private String position;
 
-    public Player() {
-    }
+    // Relationship (many players belong to one team)
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
 
-    public Player(Long id, String name, String position, String battingHand, String throwingHand) {
+    public Player() {}
+
+    public Player(Long id, String name, String position, Team team) {
         this.id = id;
         this.name = name;
         this.position = position;
-        this.battingHand = battingHand;
-        this.throwingHand = throwingHand;
+        this.team = team;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getPosition() { return position; }
-    public void setPosition(String position) { this.position = position; }
+    public String getName() {
+        return name;
+    }
 
-    public String getBattingHand() { return battingHand; }
-    public void setBattingHand(String battingHand) { this.battingHand = battingHand; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public String getThrowingHand() { return throwingHand; }
-    public void setThrowingHand(String throwingHand) { this.throwingHand = throwingHand; }
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
 }
