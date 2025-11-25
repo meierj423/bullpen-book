@@ -1,44 +1,89 @@
 package com.jack.bullpenbook.model;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
+@Entity
 public class Game {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDate date;
-    private String opponent;
-    private boolean home;        // true = home, false = away
-    private int teamScore;
-    private int opponentScore;
+    private LocalDate gameDate;
+    private Integer homeTeamScore;
+    private Integer awayTeamScore;
+
+    @ManyToOne
+    @JoinColumn(name = "home_team_id")
+    private Team homeTeam;
+
+    @ManyToOne
+    @JoinColumn(name = "away_team_id")
+    private Team awayTeam;
 
     public Game() {
     }
 
-    public Game(Long id, LocalDate date, String opponent, boolean home,
-                int teamScore, int opponentScore) {
+    public Game(Long id,
+                LocalDate gameDate,
+                Integer homeTeamScore,
+                Integer awayTeamScore,
+                Team homeTeam,
+                Team awayTeam) {
         this.id = id;
-        this.date = date;
-        this.opponent = opponent;
-        this.home = home;
-        this.teamScore = teamScore;
-        this.opponentScore = opponentScore;
+        this.gameDate = gameDate;
+        this.homeTeamScore = homeTeamScore;
+        this.awayTeamScore = awayTeamScore;
+        this.homeTeam = homeTeam;
+        this.awayTeam = awayTeam;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public LocalDate getDate() { return date; }
-    public void setDate(LocalDate date) { this.date = date; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getOpponent() { return opponent; }
-    public void setOpponent(String opponent) { this.opponent = opponent; }
+    public LocalDate getGameDate() {
+        return gameDate;
+    }
 
-    public boolean isHome() { return home; }
-    public void setHome(boolean home) { this.home = home; }
+    public void setGameDate(LocalDate gameDate) {
+        this.gameDate = gameDate;
+    }
 
-    public int getTeamScore() { return teamScore; }
-    public void setTeamScore(int teamScore) { this.teamScore = teamScore; }
+    public Integer getHomeTeamScore() {
+        return homeTeamScore;
+    }
 
-    public int getOpponentScore() { return opponentScore; }
-    public void setOpponentScore(int opponentScore) { this.opponentScore = opponentScore; }
+    public void setHomeTeamScore(Integer homeTeamScore) {
+        this.homeTeamScore = homeTeamScore;
+    }
+
+    public Integer getAwayTeamScore() {
+        return awayTeamScore;
+    }
+
+    public void setAwayTeamScore(Integer awayTeamScore) {
+        this.awayTeamScore = awayTeamScore;
+    }
+
+    public Team getHomeTeam() {
+        return homeTeam;
+    }
+
+    public void setHomeTeam(Team homeTeam) {
+        this.homeTeam = homeTeam;
+    }
+
+    public Team getAwayTeam() {
+        return awayTeam;
+    }
+
+    public void setAwayTeam(Team awayTeam) {
+        this.awayTeam = awayTeam;
+    }
 }
