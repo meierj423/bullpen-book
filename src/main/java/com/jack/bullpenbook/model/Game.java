@@ -22,8 +22,7 @@ public class Game {
     @JoinColumn(name = "away_team_id")
     private Team awayTeam;
 
-    public Game() {
-    }
+    public Game() {}
 
     public Game(Long id,
                 LocalDate gameDate,
@@ -43,47 +42,53 @@ public class Game {
         return id;
     }
 
-    public void setId(Long id) {
+    public Game setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public LocalDate getGameDate() {
         return gameDate;
     }
 
-    public void setGameDate(LocalDate gameDate) {
+    public Game setGameDate(LocalDate gameDate) {
         this.gameDate = gameDate;
+        return this;
     }
 
     public Integer getHomeTeamScore() {
         return homeTeamScore;
     }
 
-    public void setHomeTeamScore(Integer homeTeamScore) {
+    public Game setHomeTeamScore(Integer homeTeamScore) {
         this.homeTeamScore = homeTeamScore;
+        return this;
     }
 
     public Integer getAwayTeamScore() {
         return awayTeamScore;
     }
 
-    public void setAwayTeamScore(Integer awayTeamScore) {
+    public Game setAwayTeamScore(Integer awayTeamScore) {
         this.awayTeamScore = awayTeamScore;
+        return this;
     }
 
     public Team getHomeTeam() {
         return homeTeam;
     }
 
-    public void setHomeTeam(Team homeTeam) {
+    public Game setHomeTeam(Team homeTeam) {
         this.homeTeam = homeTeam;
+        return this;
     }
 
     public Team getAwayTeam() {
         return awayTeam;
     }
 
-    public void setAwayTeam(Team awayTeam) {
+    public Game setAwayTeam(Team awayTeam) {
         this.awayTeam = awayTeam;
+        return this;
     }
 }

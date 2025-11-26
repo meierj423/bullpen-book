@@ -1,5 +1,6 @@
 package com.jack.bullpenbook.service;
 
+import com.jack.bullpenbook.dto.GameRequest;
 import com.jack.bullpenbook.model.Game;
 
 import java.util.List;
@@ -7,5 +8,5 @@ import java.util.List;
 public interface GameService {
     List<Game> getAllGames();
 
-    Game createGame(Game game);
+    Game createGame(GameRequest request);
 }

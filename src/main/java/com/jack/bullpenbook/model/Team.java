@@ -17,8 +17,7 @@ public class Team {
     private int losses = 0;
     private int gamesPlayed = 0;
 
-    public Team() {
-    }
+    public Team() {}
 
     public Team(Long id, String name, String city) {
         this.id = id;
@@ -30,47 +29,53 @@ public class Team {
         return id;
     }
 
-    public void setId(Long id) {
+    public Team setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public Team setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public Team setCity(String city) {
         this.city = city;
+        return this;
     }
 
     public int getWins() {
         return wins;
     }
 
-    public void setWins(int wins) {
+    public Team setWins(int wins) {
         this.wins = wins;
+        return this;
     }
 
     public int getLosses() {
         return losses;
     }
 
-    public void setLosses(int losses) {
+    public Team setLosses(int losses) {
         this.losses = losses;
+        return this;
     }
 
     public int getGamesPlayed() {
         return gamesPlayed;
     }
 
-    public void setGamesPlayed(int gamesPlayed) {
+    public Team setGamesPlayed(int gamesPlayed) {
         this.gamesPlayed = gamesPlayed;
+        return this;
     }
 }

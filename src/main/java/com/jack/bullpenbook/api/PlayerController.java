@@ -1,5 +1,6 @@
 package com.jack.bullpenbook.api;
 
+import com.jack.bullpenbook.dto.PlayerRequest;
 import com.jack.bullpenbook.model.Player;
 import com.jack.bullpenbook.service.PlayerService;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class PlayerController {
     }
 
     @PostMapping
-    public Player createPlayer(@RequestBody Player player) {
-        return playerService.createPlayer(player);
+    public Player createPlayer(@RequestBody PlayerRequest request) {
+        return playerService.createPlayer(request);
     }
 }

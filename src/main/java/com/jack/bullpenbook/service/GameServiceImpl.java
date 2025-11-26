@@ -1,11 +1,13 @@
 package com.jack.bullpenbook.service;
 
+import com.jack.bullpenbook.dto.GameRequest;
 import com.jack.bullpenbook.model.Game;
 import com.jack.bullpenbook.model.Team;
 import com.jack.bullpenbook.repository.GameRepository;
 import com.jack.bullpenbook.repository.TeamRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -26,29 +28,33 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Game createGame(Game game) {
-        // 1) Extract IDs from the incoming Game object
-        Long homeId = game.getHomeTeam().getId();
-        Long awayId = game.getAwayTeam().getId();
+    public Game createGame(GameRequest request) {
+        // 1) Fetch teams
+        Team home = teamRepository.findById(request.getHomeTeamId())
+                .orElseThrow(() -> new IllegalArgumentException("Home team not found"));
 
-        // 2) Fetch the Team entities from the DB
-        Team home = teamRepository.findById(homeId)
-                .orElseThrow(() -> new IllegalArgumentException("Home team not found: " + homeId));
+        Team away = teamRepository.findById(request.getAwayTeamId())
+                .orElseThrow(() -> new IllegalArgumentException("Away team not found"));
 
-        Team away = teamRepository.findById(awayId)
-                .orElseThrow(() -> new IllegalArgumentException("Away team not found: " + awayId));
+        // 2) Convert gameDate string into LocalDate
+        LocalDate date = LocalDate.parse(request.getGameDate());
 
-        // 3) Attach managed Team entities to the Game
-        game.setHomeTeam(home);
-        game.setAwayTeam(away);
+        // 3) Create Game entity
+        Game game = new Game()
+                .setGameDate(date)
+                .setHomeTeamScore(request.getHomeTeamScore())
+                .setAwayTeamScore(request.getAwayTeamScore())
+                .setHomeTeam(home)
+                .setAwayTeam(away);
 
         // 4) Save the Game
         Game saved = gameRepository.save(game);
 
-        // 5) Update stats using the fully-populated Team entities
+        // 5) Update games played
         home.setGamesPlayed(home.getGamesPlayed() + 1);
         away.setGamesPlayed(away.getGamesPlayed() + 1);
 
+        // 6) Update team records
         if (saved.getHomeTeamScore() > saved.getAwayTeamScore()) {
             home.setWins(home.getWins() + 1);
             away.setLosses(away.getLosses() + 1);
@@ -57,7 +63,7 @@ public class GameServiceImpl implements GameService {
             home.setLosses(home.getLosses() + 1);
         }
 
-        // 6) Persist the updated teams
+        // 7) Persist the updated teams
         teamRepository.save(home);
         teamRepository.save(away);
 

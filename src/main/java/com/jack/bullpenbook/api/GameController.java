@@ -1,5 +1,6 @@
 package com.jack.bullpenbook.api;
 
+import com.jack.bullpenbook.dto.GameRequest;
 import com.jack.bullpenbook.model.Game;
 import com.jack.bullpenbook.service.GameService;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class GameController {
     }
 
     @PostMapping
-    public Game createGame(@RequestBody Game game) {
-        return gameService.createGame(game);
+    public Game createGame(@RequestBody GameRequest request) {
+        return gameService.createGame(request);
     }
 }

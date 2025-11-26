@@ -29,31 +29,35 @@ public class Player {
         return id;
     }
 
-    public void setId(Long id) {
+    public Player setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public Player setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getPosition() {
         return position;
     }
 
-    public void setPosition(String position) {
+    public Player setPosition(String position) {
         this.position = position;
+        return this;
     }
 
     public Team getTeam() {
         return team;
     }
 
-    public void setTeam(Team team) {
+    public Player setTeam(Team team) {
         this.team = team;
+        return this;
     }
 }
