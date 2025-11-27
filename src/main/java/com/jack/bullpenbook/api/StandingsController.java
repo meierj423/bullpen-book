@@ -1,5 +1,6 @@
 package com.jack.bullpenbook.api;
 
+import com.jack.bullpenbook.dto.StandingsDTO;
 import com.jack.bullpenbook.model.Team;
 import com.jack.bullpenbook.repository.TeamRepository;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,11 +21,31 @@ public class StandingsController {
     }
 
     @GetMapping
-    public List<Team> getStandings() {
+    public List<StandingsDTO> getStandings() {
         List<Team> teams = teamRepository.findAll();
 
-        teams.sort(Comparator.comparingInt(Team::getWins).reversed());
+        return teams.stream()
+                .map(this::toDto)
+                // sort by win% desc, then wins desc
+                .sorted(Comparator
+                        .comparingDouble(StandingsDTO::getWinPercentage).reversed()
+                        .thenComparingInt(StandingsDTO::getWins).reversed())
+                .toList();
+    }
 
-        return teams;
+    private StandingsDTO toDto(Team team) {
+        StandingsDTO dto = new StandingsDTO()
+                .setTeamId(team.getId())
+                .setTeamName(team.getName())
+                .setCity(team.getCity())
+                .setWins(team.getWins())
+                .setLosses(team.getLosses())
+                .setGamesPlayed(team.getGamesPlayed());
+
+        int gp = team.getGamesPlayed();
+        double pct = (gp == 0) ? 0.0 : (double) team.getWins() / gp;
+        dto.setWinPercentage(pct);
+
+        return dto;
     }
 }
