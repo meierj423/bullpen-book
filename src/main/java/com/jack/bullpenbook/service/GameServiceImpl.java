@@ -1,6 +1,7 @@
 package com.jack.bullpenbook.service;
 
 import com.jack.bullpenbook.dto.GameRequest;
+import com.jack.bullpenbook.dto.GameSummaryDTO;
 import com.jack.bullpenbook.model.Game;
 import com.jack.bullpenbook.model.Team;
 import com.jack.bullpenbook.repository.GameRepository;
@@ -25,6 +26,40 @@ public class GameServiceImpl implements GameService {
     @Override
     public List<Game> getAllGames() {
         return gameRepository.findAll();
+    }
+
+    @Override
+    public List<GameSummaryDTO> getGamesForTeam(Long teamId) {
+        List<Game> games = gameRepository.findByHomeTeamIdOrAwayTeamId(teamId, teamId);
+
+        return games.stream()
+                .map(game -> mapToSummary(game, teamId))
+                .toList();
+    }
+
+    private GameSummaryDTO mapToSummary(Game game, Long teamId) {
+        Team home = game.getHomeTeam();
+        Team away = game.getAwayTeam();
+
+        boolean isHome = home.getId().equals(teamId);
+        Team team = isHome ? home : away;
+        Team opponent = isHome ? away : home;
+
+        GameSummaryDTO dto = new GameSummaryDTO();
+        dto.setGameId(game.getId());
+        dto.setGameDate(game.getGameDate().toString());
+
+        dto.setTeamId(team.getId());
+        dto.setTeamName(team.getName());
+
+        dto.setOpponentId(opponent.getId());
+        dto.setOpponentName(opponent.getName());
+
+        dto.setHome(isHome);
+        dto.setTeamScore(isHome ? game.getHomeTeamScore() : game.getAwayTeamScore());
+        dto.setOpponentScore(isHome ? game.getAwayTeamScore() : game.getHomeTeamScore());
+
+        return dto;
     }
 
     @Override
