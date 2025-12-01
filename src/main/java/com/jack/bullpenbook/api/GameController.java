@@ -3,6 +3,7 @@ package com.jack.bullpenbook.api;
 import com.jack.bullpenbook.dto.GameRequest;
 import com.jack.bullpenbook.model.Game;
 import com.jack.bullpenbook.service.GameService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class GameController {
     }
 
     @PostMapping
-    public Game createGame(@RequestBody GameRequest request) {
+    public Game createGame(@RequestBody @Valid GameRequest request) {
         return gameService.createGame(request);
     }
 }

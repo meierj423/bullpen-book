@@ -1,11 +1,20 @@
 package com.jack.bullpenbook.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class GameRequest {
 
+    @NotBlank
     private String gameDate;
+    @Min(0)
     private int homeTeamScore;
+    @Min(0)
     private int awayTeamScore;
+    @NotNull
     private Long homeTeamId;
+    @NotNull
     private Long awayTeamId;
 
     public GameRequest() {}

@@ -3,6 +3,7 @@ package com.jack.bullpenbook.api;
 import com.jack.bullpenbook.dto.PlayerRequest;
 import com.jack.bullpenbook.model.Player;
 import com.jack.bullpenbook.service.PlayerService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class PlayerController {
     }
 
     @PostMapping
-    public Player createPlayer(@RequestBody PlayerRequest request) {
+    public Player createPlayer(@RequestBody @Valid PlayerRequest request) {
         return playerService.createPlayer(request);
     }
 }
