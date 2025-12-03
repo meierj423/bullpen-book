@@ -29,6 +29,15 @@ public class TeamStatsServiceImpl implements TeamStatsService {
         // 1) Load all games for this team
         List<Game> games = gameRepository.findByHomeTeamIdOrAwayTeamId(teamId, teamId);
 
+        if (games.isEmpty()) {
+            return new TeamAdvancedStatsDTO()
+                    .setGames(0)
+                    .setRunsScored(0)
+                    .setRunsAllowed(0)
+                    .setRunDifferential(0)
+                    .setExpectedWinPct(0.0);
+        }
+
         // 2) Build the input string for C++: "teamScore oppScore" per line
         StringBuilder inputBuilder = new StringBuilder();
         for (Game game : games) {
@@ -84,7 +93,7 @@ public class TeamStatsServiceImpl implements TeamStatsService {
 
         } catch (IOException | InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new RuntimeException("Failed to run C++ stats engine", e);
+            throw new StatsEngineException("Failed to run C++ stats engine", e);
         }
     }
 }
