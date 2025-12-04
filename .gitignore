@@ -31,4 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+### C++ build output ###
 /cpp/team_stats
+cpp/*.o
+cpp/*.out
