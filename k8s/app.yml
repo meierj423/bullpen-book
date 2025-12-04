@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bullpen-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bullpen-app
+  template:
+    metadata:
+      labels:
+        app: bullpen-app
+    spec:
+      containers:
+        - name: bullpen-app
+          image: bullpen-book:dev
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres:5432/bullpen
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              value: update
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bullpen-app
+spec:
+  selector:
+    app: bullpen-app
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30080
+  type: NodePort
