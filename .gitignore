@@ -31,3 +31,4 @@ build/
 
 ### VS Code ###
 .vscode/
+/cpp/team_stats
