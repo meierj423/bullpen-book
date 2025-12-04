@@ -1,52 +1,158 @@
-# Bullpen Book
+# Bullpen Book – Baseball Stats Engine (Spring Boot , C++ , Docker , K8s)
 
-A small baseball stats backend built with Java and Spring Boot.
+Bullpen Book is a lightweight baseball statistics backend featuring a hybrid architecture:
+Spring Boot (Java) for REST APIs & persistence, and a C++ stats engine for advanced analytics.
+The project includes full Docker support, and Kubernetes manifests.
+
+---
 
 ## Tech Stack
 
-- Java 17
-- Spring Boot (Web, Data JPA, Validation)
-- PostgreSQL
-- Maven
-- JPA/Hibernate ORM
-- RESTful APIs with DTOs
-- JUnit + Mockito for unit tests
+### **Backend**
+
+* Java 17
+* Spring Boot (Web, Data JPA, Validation)
+* JPA/Hibernate ORM
+* PostgreSQL (prod), H2 (demo)
+* Maven
+
+### **Native Stats Engine**
+
+* C++17
+* CMake build
+* Communicates via subprocess execution from Java
+
+### **Infrastructure**
+
+* Docker & Docker Compose
+* Kubernetes manifests (`postgres.yml`, `app.yml`)
+* Secrets + ConfigMaps + PersistentVolume
+* NodePort exposure for local K8s cluster
+
+### **Testing**
+
+* JUnit 5
+* Mockito
+* Unit test coverage for services (e.g., TeamStatsServiceImpl)
+
+---
 
 ## Domain Model
 
-- **Team** – name, city, wins, losses, gamesPlayed
-- **Player** – name, position, belongs to a Team
-- **Game** – date, home team, away team, scores
+| Entity     | Description                           |
+| ---------- | ------------------------------------- |
+| **Team**   | name, city, wins, losses, gamesPlayed |
+| **Player** | name, position, assigned to a Team    |
+| **Game**   | date, home/away teams, scores         |
 
-## Features
+---
 
-- Create and list teams:
-    - `GET /api/teams`
-    - `POST /api/teams`
+## REST API Endpoints
 
-- Create and list players (with team assignment via DTO):
-    - `GET /api/players`
-    - `POST /api/players` (`PlayerRequest`)
+### **Teams**
 
-- Record games between teams (using `GameRequest` DTO):
-    - `GET /api/games`
-    - `POST /api/games`
+* `GET /api/teams` — list all teams
+* `POST /api/teams` — create a team
+* `GET /api/teams/{id}/games` — view schedule
+* `GET /api/teams/{id}/advanced-stats` — calls the C++ analytics engine
 
-- View team standings (wins/losses, win%):
-    - `GET /api/standings`
+### **Players**
 
-- View a team’s schedule / games:
-    - `GET /api/teams/{teamId}/games`
+* `GET /api/players`
+* `POST /api/players` — uses `PlayerRequest` DTO validation
 
-## Validation & Error Handling
+### **Games**
 
-- DTO validation using Jakarta Bean Validation (`@NotNull`, `@NotBlank`, `@Min`)
-- Global error handler (`@RestControllerAdvice`) returning clean JSON for:
-    - Validation errors
-    - Missing entities (e.g., unknown teamId)
+* `GET /api/games`
+* `POST /api/games` — uses `GameRequest` DTO
+
+### **Standings**
+
+* `GET /api/standings` — win/loss records, win %
+
+---
+
+## Advanced Stats (C++ Engine Integration)
+
+The endpoint:
+
+```
+GET /api/teams/{teamId}/advanced-stats
+```
+
+Triggers the following workflow:
+
+1. Java writes all game records into a temporary input file
+2. Java executes the C++ binary (`team_stats`)
+3. C++ parses the stats, computes rates & metrics
+4. C++ prints JSON
+5. Java deserializes into `TeamStatsDTO` using Jackson
+
+---
+
+##  Validation & Error Handling
+
+* Jakarta Bean Validation (`@NotNull`, `@NotBlank`, `@Min`, etc.)
+* Centralized exception handling using `@RestControllerAdvice`
+* Clean JSON error responses for:
+
+  * Validation errors
+  * Missing resources
+  * C++ engine failures
+
+---
 
 ## Tests
 
-- `GameServiceImplTest` verifies that:
-    - Games are created using DTO input
-    - Standings (wins/losses/gamesPlayed) are updated correctly
+### Included:
+
+* `TeamStatsServiceImplTest`
+
+  * Ensures C++ engine invocation logic behaves correctly
+  * Validates JSON deserialization
+  * Mocks filesystem interactions
+
+### Additional tests:
+
+* Game creation & standings updates
+* DTO validation tests
+
+---
+
+## Docker Support
+
+Build container:
+
+```bash
+docker build -t bullpen-book:dev .
+```
+
+Run via Docker Compose (Postgres + app):
+
+```bash
+docker-compose up
+```
+
+The app inside the container listens on **8080**.
+
+---
+
+## Kubernetes Deployment (Local)
+
+Manifests included in `k8s/`:
+
+* `postgres.yml` — Deployment, Service, PVC, Secret, ConfigMap
+* `app.yml` — Spring Boot Deployment + NodePort service
+
+Apply:
+
+```bash
+kubectl apply -f k8s/postgres.yml
+kubectl apply -f k8s/app.yml
+```
+
+Access the app at:
+
+```
+http://localhost:30080/api/teams
+```
