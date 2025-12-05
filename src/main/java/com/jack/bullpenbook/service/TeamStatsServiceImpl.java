@@ -16,7 +16,7 @@ public class TeamStatsServiceImpl implements TeamStatsService {
     private final GameRepository gameRepository;
     private final ObjectMapper objectMapper;
 
-    // Path to your C++ executable relative to project root
+    // Path to the C++ executable relative to project root
     private static final String STATS_EXECUTABLE = "./cpp/team_stats";
 
     public TeamStatsServiceImpl(GameRepository gameRepository, ObjectMapper objectMapper) {
@@ -56,7 +56,6 @@ public class TeamStatsServiceImpl implements TeamStatsService {
         try {
             // 3) Start the C++ process
             ProcessBuilder pb = new ProcessBuilder(STATS_EXECUTABLE);
-            // (optional) pb.directory(new File(System.getProperty("user.dir")));
             Process process = pb.start();
 
             // 4) Write input to the process's stdin

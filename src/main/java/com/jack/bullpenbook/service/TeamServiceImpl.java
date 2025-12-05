@@ -11,7 +11,6 @@ public class TeamServiceImpl implements TeamService {
 
     private final TeamRepository teamRepository;
 
-    // Spring injects TeamRepository
     public TeamServiceImpl(TeamRepository teamRepository) {
         this.teamRepository = teamRepository;
     }

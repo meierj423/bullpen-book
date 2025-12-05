@@ -18,7 +18,6 @@ public class TeamController {
     private final GameService gameService;
     private final TeamStatsService teamStatsService;
 
-    // Spring injects TeamServiceImpl here
     public TeamController(TeamService teamService, GameService gameService, TeamStatsService teamStatsService) {
         this.teamService = teamService;
         this.gameService = gameService;
