@@ -14,7 +14,7 @@ COPY cpp ./cpp
 # Make sure build tools exist for C++ (g++)
 RUN apt-get update && apt-get install -y build-essential && rm -rf /var/lib/apt/lists/*
 
-# Build Java app (skip tests if you want faster builds)
+# Build Java app (skip tests for faster builds)
 RUN mvn -q -e -B package -DskipTests
 
 # Build C++ stats engine
