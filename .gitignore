@@ -1,8 +1,18 @@
 HELP.md
-target/
-.mvn/wrapper/maven-wrapper.jar
+
+### Maven ###
+/server/target/
+server/.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+
+### Node / React ###
+/client/node_modules/
+/client/dist/
+/client/.vite/
+
+### OS junk ###
+.DS_Store
 
 ### STS ###
 .apt_generated
@@ -31,7 +41,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
 ### C++ build output ###
-/cpp/team_stats
-cpp/*.o
-cpp/*.out
+/server/cpp/team_stats
+/server/cpp/*.o
+/server/cpp/*.out
